@@ -1,0 +1,85 @@
+version: "3.8"
+services:
+  my_blog:
+    image: mysql:latest
+    container_name: in311_blog
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: my_blog
+      MYSQL_USER: blogger
+      MYSQL_PASSWORD: travel
+      MYSQL_HOST: in311_blog
+    networks:
+      - blog-nw
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: in311_blog
+    depends_on:
+      - my_blog
+    ports:
+      - "8181:80"
+    networks:
+      - blog-nw
+
+  in311-backend:
+    image: ghcr.io/nailik2018/in311-backend:latest
+    container_name: in311-backend
+    restart: unless-stopped
+    depends_on:
+      - my_blog
+    networks:
+      - blog-nw
+    ports:
+      - "8080:8080"
+
+  in311-text-validator:
+    image: ghcr.io/nailik2018/in311-text-validator:latest
+    container_name: in311-text-validator
+    restart: unless-stopped
+    networks:
+      - blog-nw
+    ports:
+      - "8081:8081"
+
+  redpanda-0:
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda-0:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      - --advertise-pandaproxy-addr internal://redpanda-0:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda-0:33145
+      - --advertise-rpc-addr redpanda-0:33145
+      - --smp 1
+      - --memory 1G
+      - --mode dev-container
+      - --default-log-level=debug
+    image: docker.redpanda.com/redpandadata/redpanda:v23.3.6
+    container_name: redpanda-0
+    volumes:
+      - redpanda-0:/var/lib/redpanda/data
+    ports:
+      - 18081:18081
+      - 18082:18082
+      - 19092:19092
+      - 19644:9644
+    networks:
+      - blog-nw
+
+networks:
+  blog-nw:
+    driver: bridge
+
+volumes:
+  local:
+  data:
+  mysql_data:
+  redpanda-0:
