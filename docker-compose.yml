@@ -13,7 +13,7 @@ services:
     networks:
       - blog-nw
     ports:
-      - "3307:3306"
+      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -31,8 +31,6 @@ services:
     image: ghcr.io/nailik2018/in311-backend:latest
     container_name: in311-backend
     restart: unless-stopped
-    depends_on:
-      - my_blog
     networks:
       - blog-nw
     ports:
