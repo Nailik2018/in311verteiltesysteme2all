@@ -1,6 +1,5 @@
 # Quarkus Kafka Blog und Message Servers
 
-
 ## 1. Einleitung
 In diesem Projekt wird ein Blog und ein Message Server implementiert. Der Blog ist ein Quarkus Projekt, welches die Posts von einem Kafka Server konsumiert und anzeigt. Der Message Server ist ebenfalls ein Quarkus Projekt, welches die Posts an den Kafka Server sendet.
 
