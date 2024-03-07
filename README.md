@@ -25,6 +25,6 @@ valid = false
 http :8080/blog/validate title=india content=namaste
 
 valid = true
-http :8080/blog/validate title=blog content=travel in bangladesch
+http :8080/blog/validate title=blog content="travel in bangladesch"
 http :8080/blog/validate title=bangladesch content="honey hunting"
 ```
