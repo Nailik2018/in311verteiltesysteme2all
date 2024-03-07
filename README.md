@@ -16,8 +16,10 @@ In diesem Projekt wird ein Blog und ein Message Server implementiert. Der Blog i
 - 3306: MySQL
 
 
-## 3. Blog Backend API über httpie
+## 3. Blog Backend API über httpie oder swagger
 ```
+http://localhost:8080/q/dev-ui/io.quarkus.quarkus-smallrye-openapi/swagger-ui
+
 Rückgabe aller Posts
 http :8080/blog
 
